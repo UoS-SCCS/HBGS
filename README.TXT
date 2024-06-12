@@ -12,7 +12,7 @@ Return to the code directory and create a build directory:
 
 Change to this directory and enter
 
-  cmake ..
+  cmake -DCMAKE_BUILD_TYPE=Release ..
 
 Then you can use 
 
