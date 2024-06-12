@@ -37,8 +37,6 @@ include(${hbgs_dir}/Cmake-options/StaticAnalysers.cmake)
 #    e.g. cmake_print_variables(<variable>)
 include(CMakePrintHelpers)
 
-option(BUILD_SHARED_LIBS "Enable compilation of shared libraries" OFF)
-
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
