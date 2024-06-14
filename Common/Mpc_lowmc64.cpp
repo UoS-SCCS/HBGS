@@ -137,11 +137,11 @@ void Mpc_lowmc64::get_aux_bits(
   uint8_t *output, uint32_t &pos, randomTape_t *current_tape_ptr) const noexcept
 {
     constexpr uint32_t last = Mpc_parameters::mpc_parties_ - 1U;
-    constexpr uint32_t n = Mpc_parameters::lowmc_state_bits_;
+    constexpr uint32_t n = Lowmc_parameters::lowmc_state_bits_;
 
     uint32_t start_of_aux_bits = offset_ + n;
 
-    for (uint32_t j = 0; j < Mpc_parameters::lowmc_rounds_; j++) {
+    for (uint32_t j = 0; j < Lowmc_parameters::lowmc_rounds_; j++) {
         for (uint32_t i = 0; i < n; i++) {
             setBit(output, pos++,
               getBit(current_tape_ptr->tape[last], start_of_aux_bits + i));
@@ -154,11 +154,11 @@ void Mpc_lowmc64::set_aux_bits(
   randomTape_t *current_tape_ptr, uint32_t &pos, uint8_t *input) const noexcept
 {
     constexpr uint32_t last = Mpc_parameters::mpc_parties_ - 1U;
-    constexpr uint32_t n = Mpc_parameters::lowmc_state_bits_;
+    constexpr uint32_t n = Lowmc_parameters::lowmc_state_bits_;
 
     uint32_t start_of_aux_bits = offset_ + n;
 
-    for (uint32_t j = 0; j < Mpc_parameters::lowmc_rounds_; j++) {
+    for (uint32_t j = 0; j < Lowmc_parameters::lowmc_rounds_; j++) {
         for (uint32_t i = 0; i < n; i++) {
             setBit(current_tape_ptr->tape[last], start_of_aux_bits + i,
               getBit(input, pos++));

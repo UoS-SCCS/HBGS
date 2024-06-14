@@ -56,7 +56,7 @@
 void print_lowmc_state_bytes(
   std::ostream &os, Lowmc_state_bytes_const_ptr state_ptr) noexcept
 {
-    print_buffer(os, state_ptr, Mpc_parameters::lowmc_state_bytes_);
+    print_buffer(os, state_ptr, Lowmc_parameters::lowmc_state_bytes_);
 }
 
 void print_lowmc_state_words(
@@ -64,12 +64,12 @@ void print_lowmc_state_words(
 {
     print_buffer(os,
       (uint8_t *)state_ptr,
-      sizeof(*state_ptr) * Mpc_parameters::lowmc_state_words_);
+      sizeof(*state_ptr) * Lowmc_parameters::lowmc_state_words_);
 }
 
 bool read_lowmc_state_words(std::ifstream &is, Lowmc_state_words_ptr state_ptr)
 {
-    state_ptr[Mpc_parameters::lowmc_state_words_ - 1] = 0;
+    state_ptr[Lowmc_parameters::lowmc_state_words_ - 1] = 0;
 
     return read_lowmc_state_bytes(is, (uint8_t *)state_ptr);
 }
@@ -79,7 +79,7 @@ bool read_lowmc_state_bytes(std::ifstream &is, Lowmc_state_bytes_ptr state_ptr)
     char c;// NOLINT
     std::string hstr(2, '\0');
     uint8_t b;// NOLINT
-    std::memset(state_ptr, 0, Mpc_parameters::lowmc_state_bytes_);
+    std::memset(state_ptr, 0, Lowmc_parameters::lowmc_state_bytes_);
     size_t state_index = 0;
 
     uint8_t i = 0;
@@ -90,7 +90,7 @@ bool read_lowmc_state_bytes(std::ifstream &is, Lowmc_state_bytes_ptr state_ptr)
 #ifdef DEBUG_LOWMC_IO
     std::cout << "read_lowmc_state_bytes: reading characters\n";
 #endif
-    while (is.get(c) && state_index < Mpc_parameters::lowmc_state_bytes_) {
+    while (is.get(c) && state_index < Lowmc_parameters::lowmc_state_bytes_) {
         if (is.eof()) {
             std::cerr << "eof encountered\n";
             break;
@@ -105,7 +105,7 @@ bool read_lowmc_state_bytes(std::ifstream &is, Lowmc_state_bytes_ptr state_ptr)
             if (std::string::npos
                 != hstr.find_first_not_of("0123456789ABCDEFabcdef")) {
                 std::cerr << "read_lowmc_state: bad character in input stream";
-                std::memset(state_ptr, 0, Mpc_parameters::lowmc_state_bytes_);
+                std::memset(state_ptr, 0, Lowmc_parameters::lowmc_state_bytes_);
                 return false;
             }
             b = static_cast<uint8_t>(stoul(hstr, nullptr, 16));
@@ -119,10 +119,10 @@ bool read_lowmc_state_bytes(std::ifstream &is, Lowmc_state_bytes_ptr state_ptr)
 #ifdef DEBUG_LOWMC_IO
     std::cout << '\n';
 #endif
-    if (i != 0 || state_index != Mpc_parameters::lowmc_state_bytes_) {
+    if (i != 0 || state_index != Lowmc_parameters::lowmc_state_bytes_) {
         std::cerr
           << "read_lowmc_state: not enough characters in input stream\n";
-        std::memset(state_ptr, 0, Mpc_parameters::lowmc_state_bytes_);
+        std::memset(state_ptr, 0, Lowmc_parameters::lowmc_state_bytes_);
         return false;
     }
 

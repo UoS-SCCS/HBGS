@@ -102,7 +102,7 @@ Tape_offset Hash1b::set_offsets(Tape_offset const &of) noexcept
     Tape_offset next_offset = of;
 
     intermediate_mask_offset_ = next_offset;
-    next_offset += Mpc_parameters::lowmc_state_bits_;
+    next_offset += Lowmc_parameters::lowmc_state_bits_;
 
     next_offset = hash1a_1_.set_offsets(next_offset);
 

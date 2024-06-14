@@ -113,7 +113,7 @@ class Mpc_mfors_full_paths
 
     Tape_offset base_offset_{ null_offset };
 
-    Mt_tree_type current_path_no_{ Public_parameters::k_ };
+    Mt_tree_type current_path_no_{ Tree_parameters::k_ };
     std::unique_ptr<Mpc_mfors_authpath> mpc_data_;
 
     void set_authpath(size_t t) noexcept;

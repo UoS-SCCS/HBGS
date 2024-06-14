@@ -107,16 +107,16 @@ Tape_offset Mpc_base_authpath::set_offsets(Tape_offset const &of) noexcept
     base_offset_ = leaf_node_addr_.set_offsets(base_offset_);
 
     precursor_offset_ = base_offset_;
-    base_offset_ += Mpc_parameters::lowmc_state_bits_;
+    base_offset_ += Lowmc_parameters::lowmc_state_bits_;
 
     for (auto &os : path_offsets_) {
         os = base_offset_;
-        base_offset_ += Mpc_parameters::lowmc_state_bits_;
+        base_offset_ += Lowmc_parameters::lowmc_state_bits_;
     }
 
     for (auto &os : intermediate_offsets_) {
         os = base_offset_;
-        base_offset_ += Mpc_parameters::lowmc_state_bits_;
+        base_offset_ += Lowmc_parameters::lowmc_state_bits_;
     }
 
     assertm(
@@ -164,9 +164,9 @@ void Mpc_base_authpath::compute_aux_tape_sign(randomTape_t *tapes,
               intermediate_offsets_[i + 1], &paramset_);
         } else if (root_mask != nullptr) {
             std::memcpy(
-              next_hash_mask, root_mask, Mpc_parameters::lowmc_state_bytes_);
+              next_hash_mask, root_mask, Lowmc_parameters::lowmc_state_bytes_);
         } else {
-            std::memset(next_hash_mask, 0, Mpc_parameters::lowmc_state_bytes_);
+            std::memset(next_hash_mask, 0, Lowmc_parameters::lowmc_state_bytes_);
         }
 
         node_addr.update_mt_row_and_index();
@@ -184,7 +184,7 @@ void Mpc_base_authpath::compute_aux_tape_sign(randomTape_t *tapes,
           intermediate_mask_adjustment, &paramset_);
 
         std::memcpy(current_hash_mask, next_hash_mask,
-          Mpc_parameters::lowmc_state_bytes_);
+          Lowmc_parameters::lowmc_state_bytes_);
     }
 }
 
@@ -219,9 +219,9 @@ void Mpc_base_authpath::compute_aux_tape_verify(randomTape_t *tapes,
               intermediate_offsets_[i + 1], &paramset_);
         } else if (root_mask != nullptr) {
             std::memcpy(
-              next_hash_mask, root_mask, Mpc_parameters::lowmc_state_bytes_);
+              next_hash_mask, root_mask, Lowmc_parameters::lowmc_state_bytes_);
         } else {
-            std::memset(next_hash_mask, 0, Mpc_parameters::lowmc_state_bytes_);
+            std::memset(next_hash_mask, 0, Lowmc_parameters::lowmc_state_bytes_);
         }
 
         node_addr.update_mt_row_and_index();
@@ -234,7 +234,7 @@ void Mpc_base_authpath::compute_aux_tape_verify(randomTape_t *tapes,
           &paramset_);
 
         std::memcpy(current_hash_mask, next_hash_mask,
-          Mpc_parameters::lowmc_state_bytes_);
+          Lowmc_parameters::lowmc_state_bytes_);
     }
 }
 
@@ -303,7 +303,7 @@ int Mpc_base_authpath::mpc_simulate_sign(randomTape_t *tapes,
     node_addr.set_and_apply_initial_mask(tapes, t);
 
     std::memcpy(mpc_wd.inputs_[base_input_index_ + 1][t],
-      node_addr.node_state(), Mpc_parameters::lowmc_state_bytes_);
+      node_addr.node_state(), Lowmc_parameters::lowmc_state_bytes_);
 
 #ifdef DEBUG_BASE_AUTHPATH
     if (Base_authpath::depth_ < 5) {
@@ -428,10 +428,10 @@ int Mpc_base_authpath::mpc_simulate_sign(randomTape_t *tapes,
 #endif
 
         std::memcpy(
-          current_hash, next_hash, Mpc_parameters::lowmc_state_bytes_);
+          current_hash, next_hash, Lowmc_parameters::lowmc_state_bytes_);
     }
 
-    std::memcpy(output, current_hash, Mpc_parameters::lowmc_state_bytes_);
+    std::memcpy(output, current_hash, Lowmc_parameters::lowmc_state_bytes_);
 
     return rv;
 }
@@ -527,10 +527,10 @@ int Mpc_base_authpath::mpc_simulate_and_verify(randomTape_t *tapes,
         }
 
         std::memcpy(
-          current_hash, next_hash, Mpc_parameters::lowmc_state_bytes_);
+          current_hash, next_hash, Lowmc_parameters::lowmc_state_bytes_);
     }
 
-    std::memcpy(output, current_hash, Mpc_parameters::lowmc_state_bytes_);
+    std::memcpy(output, current_hash, Lowmc_parameters::lowmc_state_bytes_);
 
 #ifdef DEBUG_BASE_AUTHPATH
     if (Base_authpath::depth_ < 5) {

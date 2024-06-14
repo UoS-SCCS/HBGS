@@ -80,9 +80,9 @@ class Mpc_switch
       uint8_t *input) const noexcept;
 
     constexpr static Tape_offset offset_bits_{ 0 };
-    constexpr static Tape_offset aux_bits_{ Mpc_parameters::lowmc_state_bits_ };
+    constexpr static Tape_offset aux_bits_{ Lowmc_parameters::lowmc_state_bits_ };
     constexpr static Tape_offset tape_bits_{
-        Mpc_parameters::lowmc_state_bits_
+        Lowmc_parameters::lowmc_state_bits_
     };
 
   private:

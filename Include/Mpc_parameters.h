@@ -69,9 +69,9 @@ constexpr static size_t mt_index_bits = 8 * mt_index_bytes;
 enum class Index_parity : Mt_index_type { even = 0, odd = 1 };
 
 static_assert(
-  Public_parameters::d_ <= mt_index_bits, "d too large for the assigned type");
+  Tree_parameters::d_ <= mt_index_bits, "d too large for the assigned type");
 static_assert(
-  Public_parameters::q_alpha_ * Public_parameters::h_ <= gt_index_bits,
+  Tree_parameters::q_alpha_ * Tree_parameters::h_ <= gt_index_bits,
   "q too large for the assigned type");
 
 constexpr static size_t bits_to_bytes(size_t n_bits)

@@ -85,7 +85,7 @@ class Node_address_state
 {
   public:
     constexpr static bool store_big_endian_ =
-      Public_parameters::use_big_endian_;
+      Tree_parameters::use_big_endian_;
     Node_address_state() = default;
     Node_address_state(Node_address_state const &nas) noexcept;
     Node_address_state &operator=(Node_address_state const &nas) noexcept;

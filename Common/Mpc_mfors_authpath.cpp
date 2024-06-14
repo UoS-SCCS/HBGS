@@ -90,7 +90,7 @@ Tape_offset Mpc_mfors_authpath::set_offsets(Tape_offset const &of) noexcept
     base_offset_ = of;
 
     intermediate_mask_offset_ = base_offset_;
-    base_offset_ += Mpc_parameters::lowmc_state_bits_;
+    base_offset_ += Lowmc_parameters::lowmc_state_bits_;
 
     Mpc_base_authpath base_path{ mfors_path_ptr_->base_path_,
         base_authpath_indices_ };

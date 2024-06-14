@@ -79,7 +79,7 @@ Merkle_tree::Merkle_tree(Lowmc_state_words64_const_ptr seed,
   paramset_t *params) noexcept
   : gt_addr_{ gt_addr }, mt_tree_{ mt_tree }, params_(params)
 {
-    std::memcpy(seed_, seed, Mpc_parameters::lowmc_state_bytes_);
+    std::memcpy(seed_, seed, Lowmc_parameters::lowmc_state_bytes_);
 
     M_tree_address mt_addr{ mt_tree, d_, 0 };
     Node_address_state node_addr{};
@@ -169,11 +169,11 @@ bool Merkle_tree::get_authpath(Mt_index_type leaf_index, Base_authpath &path)
         if (leaf_lsb == 0) {
             std::memcpy(path.path_[i],
               tree_data_[row_start_index + leaf_index + 1],
-              Mpc_parameters::lowmc_state_bytes_);
+              Lowmc_parameters::lowmc_state_bytes_);
         } else {
             std::memcpy(path.path_[i],
               tree_data_[row_start_index + leaf_index - 1],
-              Mpc_parameters::lowmc_state_bytes_);
+              Lowmc_parameters::lowmc_state_bytes_);
         }
 #ifdef DEBUG_MERKLE
         if (d_ < 5) {
@@ -214,12 +214,12 @@ void Merkle_tree::generate_leaf_address(
     *next_address = gt_addr_.row_;
     next_address += gt_row_bytes;
     uint_to_mem(next_address, gt_index_bytes, gt_addr_.index_,
-      Public_parameters::use_big_endian_);
+      Tree_parameters::use_big_endian_);
     next_address += gt_index_bytes;
     *next_address = mt_tree_;
     next_address += mt_tree_bytes;
     uint_to_mem(next_address, mt_index_bytes, leaf_index,
-      Public_parameters::use_big_endian_);
+      Tree_parameters::use_big_endian_);
 }
 
 bool check_base_authpath(Lowmc_state_words64_const_ptr root,
@@ -267,7 +267,7 @@ bool check_base_authpath(Lowmc_state_words64_const_ptr root,
     if (Base_authpath::depth_ < 5) { std::cout << '\n'; }
 #endif
     if (error_detected
-        || std::memcmp(root, tree_hash, Mpc_parameters::lowmc_state_bytes_)
+        || std::memcmp(root, tree_hash, Lowmc_parameters::lowmc_state_bytes_)
              != 0) {
         return false;
     }
@@ -281,9 +281,9 @@ void copy_base_authpath(Base_authpath &dest, Base_authpath const &srce)
     dest.m_tree_ = srce.m_tree_;
     dest.leaf_index_ = srce.leaf_index_;
     std::memcpy(dest.leaf_precursor_, srce.leaf_precursor_,
-      Mpc_parameters::lowmc_state_bytes_);
+      Lowmc_parameters::lowmc_state_bytes_);
     for (size_t i = 0; i < srce.path_.size(); ++i) {
         std::memcpy(
-          dest.path_[i], srce.path_[i], Mpc_parameters::lowmc_state_bytes_);
+          dest.path_[i], srce.path_[i], Lowmc_parameters::lowmc_state_bytes_);
     }
 }

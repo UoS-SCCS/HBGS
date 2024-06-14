@@ -69,7 +69,7 @@ uint16_t get_index(uint8_t *bits, uint16_t bit_offset, uint16_t bit_size)
         setBit(index, b, getBit(bits, static_cast<uint32_t>(bit_offset + b)));
     }
     mem_to_uint<uint16_t>(
-      index_16, index, 2, !Public_parameters::use_big_endian_);
+      index_16, index, 2, !Tree_parameters::use_big_endian_);
 
     auto div = static_cast<uint16_t>(std::pow(2, 16 - bit_size));
     index_16 /= div;
@@ -80,12 +80,12 @@ uint16_t get_index(uint8_t *bits, uint16_t bit_offset, uint16_t bit_size)
 void signing_indices_from_hash2(Signing_indices &si, H2_data64 const &h2d)
 {
     static_assert(
-      Public_parameters::d_ <= 16, "signing_indices_from_hash2 assumes d<=16");
-    uint16_t bit_size = Public_parameters::d_;
+      Tree_parameters::d_ <= 16, "signing_indices_from_hash2 assumes d<=16");
+    uint16_t bit_size = Tree_parameters::d_;
     auto indices_per_state =
-      static_cast<uint16_t>(Mpc_parameters::lowmc_state_bits_ / bit_size);
+      static_cast<uint16_t>(Lowmc_parameters::lowmc_state_bits_ / bit_size);
 
-    uint16_t n_indices = Public_parameters::k_;
+    uint16_t n_indices = Tree_parameters::k_;
     assertm(indices_per_state * h2d.size() > n_indices,
       "signing_indices_from_hash2: inconsistent parameters");
 
@@ -112,12 +112,12 @@ void print_signing_indices(std::ostream &os, Signing_indices_const_ptr si)
 {
     const size_t print_row_count = 9;
     size_t ctr{ 0 };
-    while (ctr < Public_parameters::k_) {
+    while (ctr < Tree_parameters::k_) {
         for (size_t i = 0; i < print_row_count; ++i) {
-            if (ctr == Public_parameters::k_) { break; }
+            if (ctr == Tree_parameters::k_) { break; }
             os << si[ctr]
                << ((i == print_row_count - 1
-                     || ctr == Public_parameters::k_ - 1)
+                     || ctr == Tree_parameters::k_ - 1)
                       ? '\n'
                       : '\t');
             ctr++;
@@ -127,7 +127,7 @@ void print_signing_indices(std::ostream &os, Signing_indices_const_ptr si)
 
 bool read_signing_indices(std::ifstream &is, Signing_indices_ptr si)
 {
-    for (size_t i = 0; i < Public_parameters::k_; ++i) { is >> si[i]; }
+    for (size_t i = 0; i < Tree_parameters::k_; ++i) { is >> si[i]; }
     // !!!! We need some checking here
     return true;
 }
@@ -157,10 +157,10 @@ void copy_top_authpath(Top_authpath &dest, Top_authpath const &srce)
     dest.base_tree_no_ = srce.base_tree_no_;
     dest.path_size_ = srce.path_size_;
     std::memcpy(dest.base_tree_root_, srce.base_tree_root_,
-      Mpc_parameters::lowmc_state_bytes_);
+      Lowmc_parameters::lowmc_state_bytes_);
     for (size_t i = 0; i < srce.path_size_; ++i) {
         std::memcpy(dest.top_path_[i], srce.top_path_[i],
-          Mpc_parameters::lowmc_state_bytes_);
+          Lowmc_parameters::lowmc_state_bytes_);
     }
 }
 
@@ -180,7 +180,7 @@ void calculate_tree_seed(Lowmc_state_words64_ptr tree_seed,
     *next_address = gt_addr.row_;
     next_address += gt_row_bytes;
     uint_to_mem(next_address, gt_index_bytes, gt_addr.index_,
-      Public_parameters::use_big_endian_);
+      Tree_parameters::use_big_endian_);
     Hash_data hd{ mf_address_size, mf_address };
 
     lowmc_state_from_hash((uint8_t *)tree_seed, params, master_seed, hd);
@@ -233,7 +233,7 @@ bool Mfors_tree::calculate_leaves(Signing_indices_const_ptr indices) noexcept
 
     generate_authpaths_ = (indices != nullptr);
 
-    for (size_t t = 0; t < Public_parameters::k_; ++t) {
+    for (size_t t = 0; t < Tree_parameters::k_; ++t) {
         Merkle_tree base_tree(
           seed_, gt_addr_, static_cast<Mt_tree_type>(t), params_);
 
@@ -303,7 +303,7 @@ bool Mfors_tree::calculate_nodes() noexcept
         if (n_child_row_odd) {// lift
             std::memcpy(tree_data_[row_start_index + n_row_nodes - 1],
               tree_data_[left_child_index],
-              Mpc_parameters::lowmc_state_bytes_);
+              Lowmc_parameters::lowmc_state_bytes_);
         } else {
             right_child_index = left_child_index + 1U;
             node_addr.set_initial_node_address(gt_addr_, mt_addr);
@@ -336,7 +336,7 @@ bool Mfors_tree::get_root(Lowmc_state_words64_ptr root) const noexcept
 {
     if (status_ != nodes_set) { return false; }
 
-    memcpy(root, tree_data_[0], Mpc_parameters::lowmc_state_bytes_);
+    memcpy(root, tree_data_[0], Lowmc_parameters::lowmc_state_bytes_);
 
     return true;
 }
@@ -356,7 +356,7 @@ bool Mfors_tree::calculate_top_authpaths() noexcept
         return false;
     }
 
-    for (Mt_tree_type bt = 0; bt < Public_parameters::k_; ++bt) {
+    for (Mt_tree_type bt = 0; bt < Tree_parameters::k_; ++bt) {
         if (!get_top_authpath(bt)) {
             std::cerr << "Failed to obtain the top authpath for base tree "
                       << bt << '\n';
@@ -397,7 +397,7 @@ bool Mfors_tree ::get_top_authpath(Mt_tree_type base_tree_no) noexcept
     size_t row{ height_ };
     std::memcpy(path.base_tree_root_,
       tree_data_[row_start_indices_[row] + base_tree_no],
-      Mpc_parameters::lowmc_state_bytes_);
+      Lowmc_parameters::lowmc_state_bytes_);
 #ifdef DEBUG_MFORS
     if (height_ < 5 && path_index == 0) {
         std::cout << "\n     Leaf: " << 0 + base_tree_no << '\t' << 0 + row
@@ -415,16 +415,16 @@ bool Mfors_tree ::get_top_authpath(Mt_tree_type base_tree_no) noexcept
             if (row_index_parity == Index_parity::even) {
                 std::memcpy(path.top_path_[path_index++],
                   tree_data_[row_start_indices_[row] + row_index + 1],
-                  Mpc_parameters::lowmc_state_bytes_);
+                  Lowmc_parameters::lowmc_state_bytes_);
             } else {
                 std::memcpy(path.top_path_[path_index++],
                   tree_data_[row_start_indices_[row] + row_index - 1],
-                  Mpc_parameters::lowmc_state_bytes_);
+                  Lowmc_parameters::lowmc_state_bytes_);
             }
         } else if (path_state == Top_path_state::hash) {
             std::memcpy(path.top_path_[path_index++],
               tree_data_[row_start_indices_[row] + row_index - 1],
-              Mpc_parameters::lowmc_state_bytes_);
+              Lowmc_parameters::lowmc_state_bytes_);
         }
 #ifdef DEBUG_MFORS
         if (height_ < 5 && path_index > 0) {
@@ -459,10 +459,10 @@ bool check_top_authpath(Lowmc_state_words64_const_ptr root,
 
     Lowmc_state_words64 tree_hash{ 0 };
     std::memcpy(
-      tree_hash, path.base_tree_root_, Mpc_parameters::lowmc_state_bytes_);
+      tree_hash, path.base_tree_root_, Lowmc_parameters::lowmc_state_bytes_);
 
     node_addr.set_initial_node_address(gt_addr, mt_addr);
-    uint32_t n_row_nodes = Public_parameters::k_;
+    uint32_t n_row_nodes = Tree_parameters::k_;
     uint8_t path_index{ 0 };
 
 #ifdef DEBUG_MFORS
@@ -521,7 +521,7 @@ bool check_top_authpath(Lowmc_state_words64_const_ptr root,
         std::cerr << "Inconsistent path size\n";
         return false;
     }
-    if (std::memcmp(root, tree_hash, Mpc_parameters::lowmc_state_bytes_) != 0) {
+    if (std::memcmp(root, tree_hash, Lowmc_parameters::lowmc_state_bytes_) != 0) {
         return false;
     }
 
@@ -531,7 +531,7 @@ bool check_top_authpath(Lowmc_state_words64_const_ptr root,
 bool check_mfors_authpaths(Lowmc_state_words64_const_ptr root,
   Mfors_authpath_const_ptr paths, paramset_t *params)
 {
-    for (Mt_tree_type t = 0; t < Public_parameters::k_; ++t) {
+    for (Mt_tree_type t = 0; t < Tree_parameters::k_; ++t) {
         Base_authpath const &bp = paths[t].base_path_;
         Top_authpath const &tp = paths[t].top_path_;
 
@@ -565,7 +565,7 @@ bool check_mfors_authpaths(Lowmc_state_words64_const_ptr root,
 
 void print_mfors_authpaths(std::ostream &os, Mfors_authpath_const_ptr paths)
 {
-    for (Mt_tree_type t = 0; t < Public_parameters::k_; ++t) {
+    for (Mt_tree_type t = 0; t < Tree_parameters::k_; ++t) {
 #ifdef DEBUG_MFORS
         std::cout << "Wrting data for tree " << 0 + t << '\n';
 #endif
@@ -611,7 +611,7 @@ bool read_mfors_authpaths(std::ifstream &is, Mfors_authpath_ptr paths)
     [[maybe_unused]] Mt_tree_type pn;
     uint16_t uint8_tmp;
     is >> std::ws;
-    for (Mt_tree_type t = 0; t < Public_parameters::k_; ++t) {
+    for (Mt_tree_type t = 0; t < Tree_parameters::k_; ++t) {
         Base_authpath &bp = paths[t].base_path_;
         Top_authpath &tp = paths[t].top_path_;
         is >> uint8_tmp;
@@ -655,7 +655,7 @@ bool read_mfors_authpaths(std::ifstream &is, Mfors_authpath_ptr paths)
         if (uint8_tmp != tp.m_tree_) {
             std::cerr
               << "Inconsitent value read for the top tree number (must be "
-              << Public_parameters::k_ << ")\n";
+              << Tree_parameters::k_ << ")\n";
             return EXIT_FAILURE;
         }
         is >> uint8_tmp;

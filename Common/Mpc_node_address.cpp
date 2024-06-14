@@ -66,8 +66,8 @@ Tape_offset Node_address_state::set_offsets(Tape_offset of) noexcept
 
 void Node_address_state::copy_data(Node_address_state const &nas) noexcept
 {
-    std::memcpy(state_, nas.state_, Mpc_parameters::lowmc_state_bytes_);
-    std::memcpy(mask_, nas.mask_, Mpc_parameters::lowmc_state_bytes_);
+    std::memcpy(state_, nas.state_, Lowmc_parameters::lowmc_state_bytes_);
+    std::memcpy(mask_, nas.mask_, Lowmc_parameters::lowmc_state_bytes_);
     mask_gtree_only_ = nas.mask_gtree_only_;
     mask_applied_ = nas.mask_applied_;
 
@@ -100,7 +100,7 @@ void Node_address_state::set_initial_node_address(
     *(state_address + mt_row_pos_) = mt_addr.row_;
     uint_to_mem(state_address + mt_index_pos_, mt_index_bytes, mt_addr.index_,
       store_big_endian_);
-    mask_gtree_only_ = (mt_addr.m_tree_ == Public_parameters::k_);
+    mask_gtree_only_ = (mt_addr.m_tree_ == Tree_parameters::k_);
     mask_applied_ = false;
 }
 
@@ -256,8 +256,8 @@ uint16_t Node_address_state::lsb_shares(randomTape_t *tapes, size_t t) const
 
 void Node_address_state::reset()
 {
-    std::memset(state_, 0, Mpc_parameters::lowmc_state_bytes_);
-    std::memset(mask_, 0, Mpc_parameters::lowmc_state_bytes_);
+    std::memset(state_, 0, Lowmc_parameters::lowmc_state_bytes_);
+    std::memset(mask_, 0, Lowmc_parameters::lowmc_state_bytes_);
     mask_gtree_only_ = false;
     mask_applied_ = false;
 
@@ -269,7 +269,7 @@ void Node_address_state::reset()
 void Node_address_state::put_node_data(std::ostream &os) const
 {
     Lowmc_state_words64 st{ 0 };
-    std::memcpy(st, state_, Mpc_parameters::lowmc_state_bytes_);
+    std::memcpy(st, state_, Lowmc_parameters::lowmc_state_bytes_);
     if (mask_applied_) { xor64(st, mask_); }
     auto state_address = (uint8_t *)&st[0];
 
@@ -302,7 +302,7 @@ void Node_address_state::update_gt_row_and_index() noexcept
     Gt_index_type index{ 0 };
     mem_to_uint(
       index, state_address + gt_index_pos_, gt_index_bytes, store_big_endian_);
-    index /= Public_parameters::q_;
+    index /= Tree_parameters::q_;
     uint_to_mem(
       state_address + gt_index_pos_, gt_index_bytes, index, store_big_endian_);
     (*(state_address + gt_row_pos_))--;
@@ -311,7 +311,7 @@ void Node_address_state::update_gt_row_and_index() noexcept
     Gt_index_type mask{ 0 };
     mem_to_uint(
       mask, mask_address + gt_index_pos_, gt_index_bytes, store_big_endian_);
-    mask /= Public_parameters::q_;
+    mask /= Tree_parameters::q_;
     uint_to_mem(
       mask_address + gt_index_pos_, gt_index_bytes, mask, store_big_endian_);
 }

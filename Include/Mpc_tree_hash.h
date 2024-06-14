@@ -92,7 +92,7 @@ class Masked_tree_hash
     void reset();
 
     constexpr static Tape_offset local_offset_bits_ =
-      2 * Mpc_parameters::lowmc_state_bits_;
+      2 * Lowmc_parameters::lowmc_state_bits_;
 
     constexpr static Tape_offset offset_bits_ =
       Mpc_switch::offset_bits_ + Hash1b::offset_bits_ + local_offset_bits_;

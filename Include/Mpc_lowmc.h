@@ -57,10 +57,10 @@ extern "C" {
 #include "Mpc_parameters.h"
 #include "Mpc_utils.h"
 
-using Lowmc_state_words = uint32_t[Mpc_parameters::lowmc_state_words_];
+using Lowmc_state_words = uint32_t[Lowmc_parameters::lowmc_state_words_];
 using Lowmc_state_words_ptr = uint32_t *;
 using Lowmc_state_words_const_ptr = uint32_t const *;
-using Lowmc_state_bytes = uint8_t[Mpc_parameters::lowmc_state_bytes_];
+using Lowmc_state_bytes = uint8_t[Lowmc_parameters::lowmc_state_bytes_];
 using Lowmc_state_bytes_ptr = uint8_t *;
 using Lowmc_state_bytes_const_ptr = uint8_t const *;
 
@@ -92,10 +92,10 @@ class LowMC
     void set_aux_bits(randomTape_t *current_tape_ptr, uint32_t &pos,
       uint8_t *aux_bits) const noexcept;
     constexpr static Tape_offset offset_bits_ = { 0 };
-    constexpr static Tape_offset aux_bits_ = Mpc_parameters::lowmc_ands_bits_;
+    constexpr static Tape_offset aux_bits_ = Lowmc_parameters::lowmc_ands_bits_;
     // Two sets of bits needed for each round
     constexpr static Tape_offset tape_bits_ =
-      2 * Mpc_parameters::lowmc_ands_bits_;
+      2 * Lowmc_parameters::lowmc_ands_bits_;
 
   private:
     Tape_offset offset_{ null_offset };

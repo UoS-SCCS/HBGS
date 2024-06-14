@@ -53,7 +53,7 @@
 #include "Mpc_parameters.h"
 #include "Mpc_node_address.h"
 
-using Signing_indices = Mt_index_type[Public_parameters::k_];
+using Signing_indices = Mt_index_type[Tree_parameters::k_];
 using Signing_indices_ptr = Mt_index_type *;
 using Signing_indices_const_ptr = Mt_index_type const *;
 
@@ -84,14 +84,14 @@ constexpr uint32_t n_top_tree_nodes(uint32_t k, uint32_t height)
 void signing_indices_from_hash2(Signing_indices &si, H2_data64 const &h2d);
 
 constexpr static auto top_tree_param =
-  calculate_tree_height(Public_parameters::k_, 2);
+  calculate_tree_height(Tree_parameters::k_, 2);
 
 struct Top_authpath
 {
     constexpr static uint8_t height_ = top_tree_param.first;
     G_tree_address gt_addr_{};
     // The top tree has Merkle tree number k
-    const Mt_tree_type m_tree_{ Public_parameters::k_ };
+    const Mt_tree_type m_tree_{ Tree_parameters::k_ };
     // The base Merkle tree number defines the node indices for the top tree
     Mt_index_type base_tree_no_{ 0 };// The top tree leaf index
     Lowmc_state_words64 base_tree_root_{ 0 };// The leaf of the top tree
@@ -110,7 +110,7 @@ using Mfors_authpath_const_ptr = Mfors_authpath const *;
 
 struct Mfors_tree_paths
 {
-    constexpr static Mt_row_type n_paths_ = Public_parameters::k_;
+    constexpr static Mt_row_type n_paths_ = Tree_parameters::k_;
     Lowmc_state_words64 input_hash_{ 0 };
     Signing_indices indices_{};
     Mfors_authpath authpaths_[n_paths_];
@@ -145,10 +145,10 @@ class Mfors_tree
       G_tree_address const &gt_addr, paramset_t *params) noexcept;
     Mfors_tree(Mfors_tree const &) = delete;
     Mfors_tree &operator=(Mfors_tree const &) = delete;
-    constexpr static uint16_t k_ = Public_parameters::k_;
+    constexpr static uint16_t k_ = Tree_parameters::k_;
     constexpr static uint8_t height_ = top_tree_param.first;
     constexpr static uint32_t n_tree_nodes_ =
-      n_top_tree_nodes(Public_parameters::k_, height_);
+      n_top_tree_nodes(Tree_parameters::k_, height_);
     // calculate the leaves of the top tree (roots of the corresponding Merkle
     // tree) if indices is not a nullptr also calculate the base authpath for
     // the Merkle trees

@@ -74,21 +74,21 @@ template<> inline void hash_update(HashInstance *ctx, const Hash_data &t)
 template<>
 inline void hash_update(HashInstance *ctx, const Lowmc_state_bytes &t)
 {
-    HashUpdate(ctx, t, Mpc_parameters::lowmc_state_bytes_);
+    HashUpdate(ctx, t, Lowmc_parameters::lowmc_state_bytes_);
 }
 
 template<>
 inline void hash_update(HashInstance *ctx, const Lowmc_state_words &t)
 {
     // Still just do the significant bytes - ignore the extra zeros.
-    HashUpdate(ctx, (uint8_t *)t, Mpc_parameters::lowmc_state_bytes_);
+    HashUpdate(ctx, (uint8_t *)t, Lowmc_parameters::lowmc_state_bytes_);
 }
 
 template<>
 inline void hash_update(HashInstance *ctx, const Lowmc_state_words64 &t)
 {
     // Still just do the significant bytes - ignore the extra zeros.
-    HashUpdate(ctx, (uint8_t *)t, Mpc_parameters::lowmc_state_bytes_);
+    HashUpdate(ctx, (uint8_t *)t, Lowmc_parameters::lowmc_state_bytes_);
 }
 
 // Initialiser list version for the hash
@@ -104,9 +104,9 @@ void lowmc_state_from_hash(uint8_t *hash, paramset_t *params, const T &... t)
     HashInit(&ctx, params, HASH_PREFIX_NONE);
     (void)std::initializer_list<int>{ (hash_update(&ctx, t), 0)... };
     HashFinal(&ctx);
-    HashSqueeze(&ctx, hash, Mpc_parameters::lowmc_state_bytes_);
+    HashSqueeze(&ctx, hash, Lowmc_parameters::lowmc_state_bytes_);
 
-    zeroTrailingBits(hash, Mpc_parameters::lowmc_state_bits_);
+    zeroTrailingBits(hash, Lowmc_parameters::lowmc_state_bits_);
 }
 
 #endif

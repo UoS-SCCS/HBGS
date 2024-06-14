@@ -95,13 +95,13 @@ class Mpc_top_authpath
 
 
     constexpr static Tape_offset path_offset_bits_ =
-      height_ * Mpc_parameters::lowmc_state_bits_;
+      height_ * Lowmc_parameters::lowmc_state_bits_;
 
     constexpr static Tape_offset local_offset_bits_ =
       path_offset_bits_// For the path items themselves
       + Node_address_state::offset_bits_// masks for node address
       + (height_ - 1)
-          * Mpc_parameters::lowmc_state_bits_;// masks for intermediate
+          * Lowmc_parameters::lowmc_state_bits_;// masks for intermediate
                                               // results, excludes the top
                                               // node, but allows for the
                                               // maximum path size

@@ -73,11 +73,11 @@ Tape_offset Masked_tree_hash::set_offsets(Tape_offset of) noexcept
     Tape_offset next_offset = of;
 
     bit_mask_offset_ = next_offset;
-    next_offset += Mpc_parameters::lowmc_state_bits_;
+    next_offset += Lowmc_parameters::lowmc_state_bits_;
 
     // Mask for output from mpc_switch
     intermediate_mask_offset_ = next_offset;
-    next_offset += Mpc_parameters::lowmc_state_bits_;
+    next_offset += Lowmc_parameters::lowmc_state_bits_;
 
     next_offset = mpc_switch_.set_offsets(next_offset);
 
@@ -335,8 +335,8 @@ int Unmasked_tree_hash::mpc_simulate_sign(randomTape_t *current_tape_ptr,
         right_ptr = masked_current;
     }
 
-    std::memcpy(masked_left, left_ptr, Mpc_parameters::lowmc_state_bytes_);
-    std::memcpy(masked_right, right_ptr, Mpc_parameters::lowmc_state_bytes_);
+    std::memcpy(masked_left, left_ptr, Lowmc_parameters::lowmc_state_bytes_);
+    std::memcpy(masked_right, right_ptr, Lowmc_parameters::lowmc_state_bytes_);
 
     Lowmc_state_words64 remasked_first_input{ 0 };
     xor64(remasked_first_input, masked_left, first_input_mask_adjustment);

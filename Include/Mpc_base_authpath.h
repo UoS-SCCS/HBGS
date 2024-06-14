@@ -81,13 +81,13 @@ class Mpc_base_authpath
 
     constexpr static Tape_offset path_offset_bits_ =
       (depth_ + 1)
-      * Mpc_parameters::lowmc_state_bits_;// Precursor and path masks
+      * Lowmc_parameters::lowmc_state_bits_;// Precursor and path masks
 
     constexpr static Tape_offset local_offset_bits_ =
       path_offset_bits_// For the authpath values
       + Node_address_state::offset_bits_// mask for node address
       + depth_
-          * Mpc_parameters::lowmc_state_bits_;// masks for intermediate results,
+          * Lowmc_parameters::lowmc_state_bits_;// masks for intermediate results,
 
     constexpr static Tape_offset offset_bits_ =
       local_offset_bits_ + Hash1a::offset_bits_// Masks used in Hash1a

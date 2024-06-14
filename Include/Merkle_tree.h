@@ -53,7 +53,7 @@
 
 
 static_assert(
-  Public_parameters::d_ <= 16, "The Merkle tree depth must be <=16");
+  Tree_parameters::d_ <= 16, "The Merkle tree depth must be <=16");
 
 void tree_path_hash(Lowmc_state_words64_ptr tree_hash,
   Lowmc_state_words64_const_ptr authpath, Index_parity child_lsb_parity,
@@ -61,7 +61,7 @@ void tree_path_hash(Lowmc_state_words64_ptr tree_hash,
 
 struct Base_authpath
 {
-    constexpr static uint8_t depth_ = Public_parameters::d_;
+    constexpr static uint8_t depth_ = Tree_parameters::d_;
     G_tree_address gt_addr_{};
     Mt_tree_type m_tree_{ 0 };
     Mt_index_type leaf_index_{ 0 };
@@ -80,7 +80,7 @@ class Merkle_tree
       paramset_t *params) noexcept;
     Merkle_tree(Merkle_tree const &) = delete;
     Merkle_tree &operator=(Merkle_tree const &) = delete;
-    constexpr static uint8_t d_{ Public_parameters::d_ };
+    constexpr static uint8_t d_{ Tree_parameters::d_ };
     static_assert(sizeof(size_t) > sizeof(Mt_index_type),
       "sizeof(size_t) must be > sizeof(Mt_index_type)");
     constexpr static auto n_tree_nodes_ =
@@ -89,7 +89,7 @@ class Merkle_tree
       static_cast<size_t>(Pow<2, d_>::Value);
     void get_root(Lowmc_state_words64_ptr root) const
     {
-        memcpy(root, tree_data_[0], Mpc_parameters::lowmc_state_bytes_);
+        memcpy(root, tree_data_[0], Lowmc_parameters::lowmc_state_bytes_);
     }
     bool get_authpath(Mt_index_type leaf_index, Base_authpath &path);
 

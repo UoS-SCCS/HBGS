@@ -79,19 +79,19 @@ bool model_parameters_check_ok()
         std::cerr << "Inconsistent number of bits (n)\n";
         return false;
     }
-    if (paramset.stateSizeBytes != Mpc_parameters::lowmc_state_bytes_) {
+    if (paramset.stateSizeBytes != Lowmc_parameters::lowmc_state_bytes_) {
         std::cerr << "Inconsistent lowmc_state_bytes\n";
         return false;
     }
-    if (paramset.stateSizeWords != Mpc_parameters::lowmc_state_words_) {
+    if (paramset.stateSizeWords != Lowmc_parameters::lowmc_state_words_) {
         std::cerr << "Inconsistent lowmc_state_words\n";
         return false;
     }
-    if (paramset.numRounds != Mpc_parameters::lowmc_rounds_) {
+    if (paramset.numRounds != Lowmc_parameters::lowmc_rounds_) {
         std::cerr << "Inconsistent lowmc_rounds\n";
         return false;
     }
-    if (paramset.andSizeBytes != (Mpc_parameters::lowmc_ands_bits_ + 7U) / 8U) {
+    if (paramset.andSizeBytes != (Lowmc_parameters::lowmc_ands_bits_ + 7U) / 8U) {
         std::cerr << "Inconsistent lowmc_aux_bytes\n";
         return false;
     }
@@ -140,20 +140,20 @@ void print_picnic_parameters(std::ostream &os)
 void print_hbgs_parameters(std::ostream &os)
 {
     os << green << "The HBGS parameters are\n"
-       << "\t                 n: " << Public_parameters::n_ << '\n'
-       << "\t           q_alpha: " << 0 + Public_parameters::q_alpha_ << '\n'
-       << "\t                 q: " << Public_parameters::q_ << '\n'
-       << "\t                 h: " << 0 + Public_parameters::h_ << '\n'
-       << "\t                 d: " << 0 + Public_parameters::d_ << '\n'
-       << "\t                 k: " << Public_parameters::k_ << '\n';
+       << "\t                 n: " << Tree_parameters::n_ << '\n'
+       << "\t           q_alpha: " << 0 + Tree_parameters::q_alpha_ << '\n'
+       << "\t                 q: " << Tree_parameters::q_ << '\n'
+       << "\t                 h: " << 0 + Tree_parameters::h_ << '\n'
+       << "\t                 d: " << 0 + Tree_parameters::d_ << '\n'
+       << "\t                 k: " << Tree_parameters::k_ << '\n';
 
     os << "\nThe LowMC parameters are\n"
-       << "\t  lowmc_state_bits: " << Mpc_parameters::lowmc_state_bits_ << '\n'
-       << "\t lowmc_state_bytes: " << Mpc_parameters::lowmc_state_bytes_ << '\n'
-       << "\t lowmc_state_words: " << Mpc_parameters::lowmc_state_words_ << '\n'
-       << "\t      lowmc_rounds: " << Mpc_parameters::lowmc_rounds_ << '\n'
+       << "\t  lowmc_state_bits: " << Lowmc_parameters::lowmc_state_bits_ << '\n'
+       << "\t lowmc_state_bytes: " << Lowmc_parameters::lowmc_state_bytes_ << '\n'
+       << "\t lowmc_state_words: " << Lowmc_parameters::lowmc_state_words_ << '\n'
+       << "\t      lowmc_rounds: " << Lowmc_parameters::lowmc_rounds_ << '\n'
        << "\t  lowmc_ands_bytes: "
-       << (Mpc_parameters::lowmc_ands_bits_ + 7U) / 8U << '\n';
+       << (Lowmc_parameters::lowmc_ands_bits_ + 7U) / 8U << '\n';
 
     os << "\nThe MPC parameters are\n"
        << "\t       mpc_parties: " << Mpc_parameters::mpc_parties_ << '\n'
@@ -347,10 +347,10 @@ void calculate_challenge_lists(uint8_t *challenge_hash, uint16_t *challengeC,
 void calcualte_challenge_lists16(
   uint8_t *challenge_hash, uint16_t *challengeC, uint16_t *challengeP)
 {
-    assertm(Mpc_parameters::opened_mpc_rounds_ == Public_parameters::k_,
+    assertm(Mpc_parameters::opened_mpc_rounds_ == Tree_parameters::k_,
       "calculate_challenge_lists16: inconsistent values for k_ and "
       "opened_mpc_rounds_");
-    for (uint16_t i = 0; i < Public_parameters::k_; ++i) {
+    for (uint16_t i = 0; i < Tree_parameters::k_; ++i) {
         challengeC[i] =
           static_cast<uint16_t>(i * Mpc_parameters::mpc_rounds_per_path_
                                 + (challenge_hash[i] & 0x0f));

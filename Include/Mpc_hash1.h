@@ -118,7 +118,7 @@ class Hash1b
       noexcept;
 
     constexpr static Tape_offset local_offset_bits_ =
-      Mpc_parameters::lowmc_state_bits_;// For the intermediate mask
+      Lowmc_parameters::lowmc_state_bits_;// For the intermediate mask
     constexpr static Tape_offset offset_bits_ =
       2 * Hash1a::offset_bits_ + local_offset_bits_;
     constexpr static Tape_offset tape_bits_ = 2 * Hash1a::tape_bits_;

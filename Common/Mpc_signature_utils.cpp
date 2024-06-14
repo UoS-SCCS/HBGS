@@ -105,7 +105,7 @@ Proof2::Proof2(Mpc_param const &param)
     inputs_.resize(param.n_inputs_);
     for (size_t i = 0; i < param.n_inputs_; ++i) {
         inputs_[i] =
-          static_cast<uint8_t *>(calloc(1, Mpc_parameters::lowmc_state_bytes_));
+          static_cast<uint8_t *>(calloc(1, Lowmc_parameters::lowmc_state_bytes_));
         if (inputs_[i] == nullptr) {
             allocations_ok = false;
             break;
@@ -116,7 +116,7 @@ Proof2::Proof2(Mpc_param const &param)
     mpc_inputs_.resize(param.n_mpc_inputs_);
     for (size_t i = 0; i < param.n_mpc_inputs_; ++i) {
         mpc_inputs_[i] =
-          static_cast<uint8_t *>(calloc(1, Mpc_parameters::lowmc_state_bytes_));
+          static_cast<uint8_t *>(calloc(1, Lowmc_parameters::lowmc_state_bytes_));
         if (mpc_inputs_[i] == nullptr) {
             allocations_ok = false;
             break;
@@ -127,7 +127,7 @@ Proof2::Proof2(Mpc_param const &param)
     outputs_.resize(param.n_outputs_);
     for (size_t i = 0; i < param.n_outputs_; ++i) {
         outputs_[i] =
-          static_cast<uint8_t *>(calloc(1, Mpc_parameters::lowmc_state_bytes_));
+          static_cast<uint8_t *>(calloc(1, Lowmc_parameters::lowmc_state_bytes_));
         if (outputs_[i] == nullptr) {
             allocations_ok = false;
             break;

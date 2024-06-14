@@ -88,7 +88,7 @@ Mpc_mfors_full_paths::Mpc_mfors_full_paths(
 
 void Mpc_mfors_full_paths::set_authpath(size_t t) noexcept
 {
-    auto path_no = static_cast<Mt_tree_type>(t % Public_parameters::k_);
+    auto path_no = static_cast<Mt_tree_type>(t % Tree_parameters::k_);
     if (path_no != current_path_no_) {
         current_path_no_ = path_no;
         mpc_data_.reset(

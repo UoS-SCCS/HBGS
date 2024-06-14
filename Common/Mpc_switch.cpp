@@ -64,7 +64,7 @@ void Mpc_switch::compute_aux_tape(randomTape_t *current_tape_ptr,
   Lowmc_state_words64_const_ptr w_mask, paramset_t *params) const noexcept
 {
     current_tape_ptr->pos = mpc_and_tape_offset_;
-    for (uint32_t i = 0; i < Mpc_parameters::lowmc_state_bits_; ++i) {
+    for (uint32_t i = 0; i < Lowmc_parameters::lowmc_state_bits_; ++i) {
 
         uint8_t cab = get_bit_from_word_array64(ca_mask, i);
         uint8_t eb = get_bit_from_word_array64(bit_mask, i);
@@ -84,26 +84,26 @@ int Mpc_switch::mpc_simulate(Lowmc_state_words64_const_ptr extended_masked_b,
     Lowmc_state_words64 masked_ca{ 0 };
     xor64(masked_ca, masked_c, masked_a);
 
-    uint16_t b_shares[Mpc_parameters::lowmc_state_bits_]{ 0 };
+    uint16_t b_shares[Lowmc_parameters::lowmc_state_bits_]{ 0 };
     if (bit_mask_offset != null_offset) {
         current_tape_ptr->pos = bit_mask_offset;
-        for (uint32_t i = 0; i < Mpc_parameters::lowmc_state_bits_; ++i) {
+        for (uint32_t i = 0; i < Lowmc_parameters::lowmc_state_bits_; ++i) {
             b_shares[i] = tapesToWord(current_tape_ptr);
         }
     }
 
-    uint16_t c_shares[Mpc_parameters::lowmc_state_bits_]{ 0 };
+    uint16_t c_shares[Lowmc_parameters::lowmc_state_bits_]{ 0 };
     if (c_mask_offset != null_offset) {
         current_tape_ptr->pos = c_mask_offset;
-        for (uint32_t i = 0; i < Mpc_parameters::lowmc_state_bits_; ++i) {
+        for (uint32_t i = 0; i < Lowmc_parameters::lowmc_state_bits_; ++i) {
             c_shares[i] = tapesToWord(current_tape_ptr);
         }
     }
 
-    uint16_t a_shares[Mpc_parameters::lowmc_state_bits_]{ 0 };
+    uint16_t a_shares[Lowmc_parameters::lowmc_state_bits_]{ 0 };
     if (a_mask_offset != null_offset) {
         current_tape_ptr->pos = a_mask_offset;
-        for (uint32_t i = 0; i < Mpc_parameters::lowmc_state_bits_; ++i) {
+        for (uint32_t i = 0; i < Lowmc_parameters::lowmc_state_bits_; ++i) {
             a_shares[i] = tapesToWord(current_tape_ptr);
         }
     }
@@ -111,7 +111,7 @@ int Mpc_switch::mpc_simulate(Lowmc_state_words64_const_ptr extended_masked_b,
     current_tape_ptr->pos = mpc_and_tape_offset_;
     Lowmc_state_words64 w{ 0 };
 
-    for (uint32_t i = 0; i < Mpc_parameters::lowmc_state_bits_; ++i) {
+    for (uint32_t i = 0; i < Lowmc_parameters::lowmc_state_bits_; ++i) {
         uint8_t cab = get_bit_from_word_array64(masked_ca, i);
         uint8_t eb = get_bit_from_word_array64(extended_masked_b, i);
 
@@ -131,7 +131,7 @@ void Mpc_switch::get_aux_bits(
   uint8_t *output, uint32_t &pos, randomTape_t *current_tape_ptr) const noexcept
 {
     constexpr uint32_t last = Mpc_parameters::mpc_parties_ - 1U;
-    constexpr uint32_t n = Mpc_parameters::lowmc_state_bits_;
+    constexpr uint32_t n = Lowmc_parameters::lowmc_state_bits_;
 
     uint32_t start_of_aux_bits = mpc_and_tape_offset_;
 
@@ -145,7 +145,7 @@ void Mpc_switch::set_aux_bits(
   randomTape_t *current_tape_ptr, uint32_t &pos, uint8_t *input) const noexcept
 {
     constexpr uint32_t last = Mpc_parameters::mpc_parties_ - 1U;
-    constexpr uint32_t n = Mpc_parameters::lowmc_state_bits_;
+    constexpr uint32_t n = Lowmc_parameters::lowmc_state_bits_;
 
     uint32_t start_of_aux_bits = mpc_and_tape_offset_;
 

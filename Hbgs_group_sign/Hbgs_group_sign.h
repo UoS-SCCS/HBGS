@@ -95,7 +95,7 @@ class Mpc_group_sign
     constexpr static size_t n_trees_ = Group_authpaths::n_mfors_trees_;
 
     constexpr static Tape_offset local_offset_bits_ =
-      (n_trees_ - 1) * Mpc_parameters::lowmc_state_bits_;
+      (n_trees_ - 1) * Lowmc_parameters::lowmc_state_bits_;
 
     constexpr static Tape_offset local_tape_bits_ = 0U;
 

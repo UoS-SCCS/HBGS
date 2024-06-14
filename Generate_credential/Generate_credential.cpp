@@ -77,18 +77,18 @@ int generate_initial_data(
   Lowmc_state_words64_ptr hash1, Gt_index_type &gtree_index)
 {
     if (picnic_random_bytes(
-          (uint8_t *)hash1, Mpc_parameters::lowmc_state_bytes_)
+          (uint8_t *)hash1, Lowmc_parameters::lowmc_state_bytes_)
         != 0) {
         std::cerr << "Failed to generate the test hash\n";
         return EXIT_FAILURE;
     }
-    zeroTrailingBits((uint8_t *)hash1, Mpc_parameters::lowmc_state_bits_);
+    zeroTrailingBits((uint8_t *)hash1, Lowmc_parameters::lowmc_state_bits_);
 
-    if (Public_parameters::h_ == 0) {
+    if (Tree_parameters::h_ == 0) {
         gtree_index = 0;
     } else {
         Gt_index_type max_index = static_cast<Gt_index_type>(
-          std::pow(Public_parameters::q_, Public_parameters::h_) - 1);
+          std::pow(Tree_parameters::q_, Tree_parameters::h_) - 1);
         std::default_random_engine dre{};
         std::uniform_int_distribution<Gt_index_type> dist{ 0, max_index - 1 };
         gtree_index = dist(dre);
@@ -141,9 +141,9 @@ int generate_and_save_credential(std::string base_dir,
     signing_indices_from_hash2(h2_indices, h2_data);
     print_signing_indices(os, h2_indices);
 
-    G_tree_address gt_addr{ Public_parameters::h_, gtree_index };
+    G_tree_address gt_addr{ Tree_parameters::h_, gtree_index };
 
-    for (uint8_t l = Public_parameters::h_; l <= Public_parameters::h_; --l) {
+    for (uint8_t l = Tree_parameters::h_; l <= Tree_parameters::h_; --l) {
 
         td.timer_.reset();
 
@@ -220,7 +220,7 @@ int generate_and_save_credential(std::string base_dir,
             td.timer_.reset();
 
             gt_addr.row_--;
-            gt_addr.index_ /= Public_parameters::q_;
+            gt_addr.index_ /= Tree_parameters::q_;
 
             td.times_.emplace_back(Mpc_time_point{ "adjust_G_tree_address",
               static_cast<float>(td.timer_.get_duration() + 0.5f) });
@@ -233,8 +233,8 @@ int generate_and_save_credential(std::string base_dir,
       static_cast<float>(td_full.timer_.get_duration() + 0.5f) });
 
     std::ostringstream ostr;
-    ostr << issuer_name << '_' << user_name << ' ' << Public_parameters::n_
-         << ' ' << 0 + Public_parameters::h_;
+    ostr << issuer_name << '_' << user_name << ' ' << Tree_parameters::n_
+         << ' ' << 0 + Tree_parameters::h_;
 
     for (auto const &tp : td.times_) {
         std::cout << ostr.str() << std::setw(42) << tp.type_ << ' ' << tp.time_

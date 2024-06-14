@@ -64,7 +64,7 @@ bool read_group_authpaths(Group_authpaths &g_paths, std::string const &base_dir,
     }
 
     size_t m = 0;
-    for (size_t i = 0; i < Public_parameters::h_ + 1; ++i) {
+    for (size_t i = 0; i < Tree_parameters::h_ + 1; ++i) {
         Mfors_tree_paths &mft_path = g_paths.mfors_tree_paths_[m];
 
         if (!read_lowmc_state_bytes(is, (uint8_t *)mft_path.input_hash_)) {
@@ -98,10 +98,10 @@ bool read_group_authpaths(Group_authpaths &g_paths, std::string const &base_dir,
 
 bool check_group_authpaths(Group_authpaths &g_paths, paramset_t *params)
 {
-    for (size_t i = 0; i < Public_parameters::h_ + 1; ++i) {
+    for (size_t i = 0; i < Tree_parameters::h_ + 1; ++i) {
         Mfors_tree_paths &mft_path = g_paths.mfors_tree_paths_[i];
         Lowmc_state_words64_const_ptr current_root =
-          (i == Public_parameters::h_)
+          (i == Tree_parameters::h_)
             ? g_paths.public_key_
             : g_paths.mfors_tree_paths_[i + 1].input_hash_;
         if (!check_mfors_authpaths(current_root, mft_path.authpaths_, params)) {

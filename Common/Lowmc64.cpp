@@ -122,14 +122,14 @@ void copy_lowmc_state_words_to_lowmc_state_words64(
   Lowmc_state_words64_ptr w64, Lowmc_state_words_const_ptr w32)
 {
     w64[lowmc_state_words64 - 1] = 0;
-    std::memcpy(w64, w32, Mpc_parameters::lowmc_state_bytes_);
+    std::memcpy(w64, w32, Lowmc_parameters::lowmc_state_bytes_);
 }
 
 void copy_lowmc_state_words64_to_lowmc_state_words(
   Lowmc_state_words_ptr w32, Lowmc_state_words64_const_ptr w64)
 {
-    w32[Mpc_parameters::lowmc_state_words_ - 1] = 0;
-    std::memcpy(w32, w64, Mpc_parameters::lowmc_state_bytes_);
+    w32[Lowmc_parameters::lowmc_state_words_ - 1] = 0;
+    std::memcpy(w32, w64, Lowmc_parameters::lowmc_state_bytes_);
 }
 
 uint8_t parity64(uint64_t x)
@@ -165,7 +165,7 @@ void matrix_mul64(Lowmc_state_words64_ptr ciphertext,
         setBit((uint8_t *)temp, row, parity64(prod));
     }
     ciphertext[lowmc_state_words64 - 1] = 0;
-    memcpy(ciphertext, temp, Mpc_parameters::lowmc_state_bytes_);
+    memcpy(ciphertext, temp, Lowmc_parameters::lowmc_state_bytes_);
 }
 
 
@@ -203,12 +203,12 @@ void lowmc64(Lowmc_state_words64_ptr ciphertext,
 
     if (plaintext != ciphertext) {
         // ciphertext will hold the intermediate state
-        std::memcpy(ciphertext, plaintext, Mpc_parameters::lowmc_state_bytes_);
+        std::memcpy(ciphertext, plaintext, Lowmc_parameters::lowmc_state_bytes_);
     }
 
     matrix_mul64(round_key, key, Lowmc_matrices::km_[0]);
     xor64(ciphertext, round_key);
-    for (uint32_t r = 1; r <= Mpc_parameters::lowmc_rounds_; r++) {
+    for (uint32_t r = 1; r <= Lowmc_parameters::lowmc_rounds_; r++) {
         matrix_mul64(round_key, key, Lowmc_matrices::km_[r]);
         substitution((uint32_t *)ciphertext, params);
         matrix_mul64(ciphertext, ciphertext, Lowmc_matrices::lm_[r - 1]);

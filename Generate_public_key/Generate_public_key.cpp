@@ -104,14 +104,14 @@ int generate_public_key(
       static_cast<float>(td.timer_.get_duration() + 0.5f) });
 
     if (std::memcmp(issuer.public_key(), issuer2.public_key(),
-          Mpc_parameters::lowmc_state_bytes_)
+          Lowmc_parameters::lowmc_state_bytes_)
         != 0) {
         std::cerr << "Issuer keys do not match\n";
         return EXIT_FAILURE;
     }
 
     std::ostringstream ostr;
-    ostr << issuer_name << ' ' << Public_parameters::n_ << " x";
+    ostr << issuer_name << ' ' << Tree_parameters::n_ << " x";
 
     for (auto const &tp : td.times_) {
         std::cout << ostr.str() << std::setw(21) << tp.type_ << " " << tp.time_

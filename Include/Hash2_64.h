@@ -61,9 +61,9 @@ extern "C" {
 
 constexpr uint32_t calculate_n_hashes()
 {
-    uint32_t bits_required = Public_parameters::k_ * Public_parameters::d_;
+    uint32_t bits_required = Tree_parameters::k_ * Tree_parameters::d_;
     uint32_t n_hashes = 1;
-    while (n_hashes * Mpc_parameters::lowmc_state_bits_ < bits_required) {
+    while (n_hashes * Lowmc_parameters::lowmc_state_bits_ < bits_required) {
         n_hashes++;
     }
     return n_hashes;

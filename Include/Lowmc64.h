@@ -51,7 +51,7 @@
 
 using Word = uint64_t;
 inline constexpr uint16_t lowmc_state_words64 =
-  (Mpc_parameters::lowmc_state_bytes_ + sizeof(Word) - UINT16_C(1))
+  (Lowmc_parameters::lowmc_state_bytes_ + sizeof(Word) - UINT16_C(1))
   / sizeof(Word);
 
 constexpr uint16_t lowmc_state_words64_bytes =
@@ -67,19 +67,19 @@ void print_lowmc_state_words64(
 bool read_lowmc_state_words64(
   std::ifstream &is, Lowmc_state_words64_ptr state_ptr);
 
-constexpr size_t matrix_rows = Mpc_parameters::lowmc_state_bits_;
-constexpr size_t words_per_row = Mpc_parameters::lowmc_state_words_;
+constexpr size_t matrix_rows = Lowmc_parameters::lowmc_state_bits_;
+constexpr size_t words_per_row = Lowmc_parameters::lowmc_state_words_;
 constexpr size_t bytes_per_row = words_per_row * sizeof(uint32_t);
 constexpr size_t words_per_row64 = lowmc_state_words64;
 constexpr size_t bytes_per_row64 = words_per_row64 * sizeof(Word);
 
 struct Matrix_numbers
 {
-    static constexpr size_t nk_ = Mpc_parameters::lowmc_rounds_ + 1;
+    static constexpr size_t nk_ = Lowmc_parameters::lowmc_rounds_ + 1;
     static constexpr size_t nki_ = 1;
-    static constexpr size_t nl_ = Mpc_parameters::lowmc_rounds_;
-    static constexpr size_t nli_ = Mpc_parameters::lowmc_rounds_;
-    static constexpr size_t nr_ = Mpc_parameters::lowmc_rounds_;
+    static constexpr size_t nl_ = Lowmc_parameters::lowmc_rounds_;
+    static constexpr size_t nli_ = Lowmc_parameters::lowmc_rounds_;
+    static constexpr size_t nr_ = Lowmc_parameters::lowmc_rounds_;
 };
 
 void copy_lowmc_state_words_to_lowmc_state_words64(

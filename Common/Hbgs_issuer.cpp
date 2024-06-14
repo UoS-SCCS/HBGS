@@ -175,17 +175,17 @@ bool Hbgs_issuer::calculate_public_key() noexcept
 bool Hbgs_issuer::extract_master_seed()
 {
     static_assert(
-      sizeof(seed_string_) >= 2 * Mpc_parameters::lowmc_state_bytes_);
+      sizeof(seed_string_) >= 2 * Lowmc_parameters::lowmc_state_bytes_);
 
     size_t str_index{ 0 };
     auto ms_bytes = (uint8_t *)master_seed_;
     std::string bstr(2, '\0');
-    for (size_t i = 0; i < Mpc_parameters::lowmc_state_bytes_; ++i) {
+    for (size_t i = 0; i < Lowmc_parameters::lowmc_state_bytes_; ++i) {
         bstr[0] = seed_string_[str_index++];
         bstr[1] = seed_string_[str_index++];
         ms_bytes[i] = static_cast<uint8_t>(stoul(bstr, nullptr, 16));
     }
-    zeroTrailingBits(ms_bytes, Mpc_parameters::lowmc_state_bits_);
+    zeroTrailingBits(ms_bytes, Lowmc_parameters::lowmc_state_bits_);
 
 #ifdef DEBUG_ISSUER
     std::cout << "Master seed: ";
@@ -202,7 +202,7 @@ std::string make_issuer_filename(
     std::string filename = make_filename(base_dir, issuer_name);
 
     std::ostringstream ostr;
-    ostr << filename << '_' << Public_parameters::n_ << '.' << issuer_file_ext;
+    ostr << filename << '_' << Tree_parameters::n_ << '.' << issuer_file_ext;
 
     return ostr.str();
 }
@@ -213,8 +213,8 @@ std::string make_credential_filename(std::string const &base_dir,
     std::string filename = make_filename(base_dir, issuer_name);
 
     std::ostringstream ostr;
-    ostr << filename << '_' << Public_parameters::n_ << '_'
-         << 0 + Public_parameters::h_ << '_' << user_name << '.'
+    ostr << filename << '_' << Tree_parameters::n_ << '_'
+         << 0 + Tree_parameters::h_ << '_' << user_name << '.'
          << credential_file_ext;
 
     return ostr.str();

@@ -56,10 +56,10 @@ extern "C" {
 #include "Hbgs_param.h"
 #include "Mpc_parameters.h"
 
-using Lowmc_state_words = uint32_t[Mpc_parameters::lowmc_state_words_];
+using Lowmc_state_words = uint32_t[Lowmc_parameters::lowmc_state_words_];
 using Lowmc_state_words_ptr = uint32_t *;
 using Lowmc_state_words_const_ptr = uint32_t const *;
-using Lowmc_state_bytes = uint8_t[Mpc_parameters::lowmc_state_bytes_];
+using Lowmc_state_bytes = uint8_t[Lowmc_parameters::lowmc_state_bytes_];
 using Lowmc_state_bytes_ptr = uint8_t *;
 using Lowmc_state_bytes_const_ptr = uint8_t const *;
 

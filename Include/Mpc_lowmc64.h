@@ -78,10 +78,10 @@ class Mpc_lowmc64
     void set_aux_bits(randomTape_t *current_tape_ptr, uint32_t &pos,
       uint8_t *aux_bits) const noexcept;
     constexpr static Tape_offset offset_bits_ = { 0 };
-    constexpr static Tape_offset aux_bits_ = Mpc_parameters::lowmc_ands_bits_;
+    constexpr static Tape_offset aux_bits_ = Lowmc_parameters::lowmc_ands_bits_;
     // Two sets of bits needed for each round
     constexpr static Tape_offset tape_bits_ =
-      2 * Mpc_parameters::lowmc_ands_bits_;
+      2 * Lowmc_parameters::lowmc_ands_bits_;
 
   private:
     Tape_offset offset_{ null_offset };

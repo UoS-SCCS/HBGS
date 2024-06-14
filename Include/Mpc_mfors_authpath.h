@@ -83,7 +83,7 @@ class Mpc_mfors_authpath
     constexpr static uint8_t height_ = Top_authpath::height_;
 
     constexpr static Tape_offset local_offset_bits_ =
-      Mpc_parameters::lowmc_state_bits_;// mask for intermediate hash (root
+      Lowmc_parameters::lowmc_state_bits_;// mask for intermediate hash (root
                                         // of base tree and leaf of top tree);
 
     constexpr static Tape_offset path_offset_bits_ =

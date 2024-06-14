@@ -54,7 +54,7 @@
 struct Group_authpaths
 {
 
-    constexpr static size_t n_mfors_trees_ = Public_parameters::h_ + 1;
+    constexpr static size_t n_mfors_trees_ = Tree_parameters::h_ + 1;
     Lowmc_state_words64 public_key_{ 0 };
     Mfors_tree_paths mfors_tree_paths_[n_mfors_trees_];
 };

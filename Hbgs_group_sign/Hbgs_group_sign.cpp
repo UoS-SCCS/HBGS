@@ -93,7 +93,7 @@ Tape_offset Mpc_group_sign::set_offsets(Tape_offset const &of) noexcept
 
     for (size_t i = 0; i < n_trees_ - 1; ++i) {
         intermediate_root_mask_offset_[i] = base_offset_;
-        base_offset_ += Mpc_parameters::lowmc_state_bits_;
+        base_offset_ += Lowmc_parameters::lowmc_state_bits_;
     }
     // Create a dummy value to get the offset
     Tape_offset next_offset{ base_offset_ };
@@ -390,7 +390,7 @@ int test_group_authpaths(std::string const &base_dir,
 #ifdef DEBUG_GROUP_SIGN
     std::cout << "\nGroup authpaths data read "
               << ((do_checks) ? "and checked " : "") << "OK\n\n"
-              << "Full MFORS authpaths read: " << Public_parameters::h_ + 1
+              << "Full MFORS authpaths read: " << Tree_parameters::h_ + 1
               << '\n';
 
     std::cout << "           MFORS root: ";
@@ -442,7 +442,7 @@ int test_group_authpaths(std::string const &base_dir,
     std::random_device
       rd;// Will be used to obtain a seed for the random number engine
     std::mt19937 gen(rd());// Standard mersenne_twister_engine seeded with rd()
-    std::uniform_int_distribution<> distrib(0, Public_parameters::h_);
+    std::uniform_int_distribution<> distrib(0, Tree_parameters::h_);
 
     Mpc_group_sign mft_test(&g_paths);
 
@@ -517,8 +517,8 @@ int test_group_authpaths(std::string const &base_dir,
     }
 
     std::ostringstream ostr;
-    ostr << credential_name << ' ' << Public_parameters::n_ << ' '
-         << 0 + Public_parameters::h_;
+    ostr << credential_name << ' ' << Tree_parameters::n_ << ' '
+         << 0 + Tree_parameters::h_;
 
 
     std::cout << ostr.str() << std::setw(19) << "signature_size" << ' '

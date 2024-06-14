@@ -7,36 +7,35 @@
  *
  * (C) Copyright 2021, University of Surrey. All rights reserved.
  *
-*******************************************************************************/
+ *******************************************************************************/
 
 /*******************************************************************************
-*                                                                              *
-* (C) Copyright 2018-2023 University of Surrey. All rights reserved.           *
-*                                                                              *
-* Redistribution and use in source and binary forms, with or without           *
-* modification, are permitted provided that the following conditions are met:  *
-*                                                                              *
-* 1. Redistributions of source code must retain the above copyright notice,    *
-* this list of conditions and the following disclaimer.                        *
-*                                                                              *
-* 2. Redistributions in binary form must reproduce the above copyright notice, *
-* this list of conditions and the following disclaimer in the documentation    *
-* and/or other materials provided with the distribution.                       *
-*                                                                              *
-* THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  *
-* AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE    *
-* IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE   *
-* ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE    *
-* LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR          *
-* CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF         *
-* SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS     *
-* INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN      *
-* CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)      *
-* ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE   *
-* POSSIBILITY OF SUCH DAMAGE.                                                  *
-*                                                                              *
-*******************************************************************************/
-
+ *                                                                              *
+ * (C) Copyright 2018-2023 University of Surrey. All rights reserved. *
+ *                                                                              *
+ * Redistribution and use in source and binary forms, with or without *
+ * modification, are permitted provided that the following conditions are met: *
+ *                                                                              *
+ * 1. Redistributions of source code must retain the above copyright notice, *
+ * this list of conditions and the following disclaimer. *
+ *                                                                              *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ ** this list of conditions and the following disclaimer in the documentation *
+ * and/or other materials provided with the distribution. *
+ *                                                                              *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" *
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE *
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE *
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE *
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR *
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF *
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS *
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN *
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) *
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE *
+ * POSSIBILITY OF SUCH DAMAGE. *
+ *                                                                              *
+ *******************************************************************************/
 
 
 #ifndef HBGS_PARAM_H
@@ -73,7 +72,7 @@ inline constexpr std::pair<uint32_t, uint32_t> calculate_tree_height(
     return std::make_pair(ht, n_leaves);
 }
 
-struct Public_parameters
+struct Tree_parameters
 {
     static constexpr uint16_t n_ = HBGS_N;
     static constexpr uint8_t q_alpha_ = HBGS_QA;
@@ -91,13 +90,13 @@ struct Public_parameters
 
 inline constexpr uint16_t rounds_per_path(uint16_t n_rounds)
 {
-    uint16_t rpp = n_rounds / Public_parameters::k_;
+    uint16_t rpp = n_rounds / Tree_parameters::k_;
 
     // Adjust for test parameters with small round numbers
     return (rpp == 0) ? 1 : rpp;
 }
 
-struct Mpc_parameters
+struct Lowmc_parameters
 {
     static constexpr uint16_t lowmc_state_bits_ = HBGS_N;
     static constexpr uint16_t lowmc_state_bytes_ =
@@ -109,7 +108,10 @@ struct Mpc_parameters
     // a full set of S-boxes for each state
     static constexpr uint16_t lowmc_ands_bits_ =
       lowmc_rounds_ * lowmc_state_bits_;
+};
 
+struct Mpc_parameters
+{
     static constexpr uint16_t mpc_parties_ =
       16U;// mpc_parties must be divisible by 4 for the sha3 times4 calls
     static constexpr uint16_t mpc_rounds_ = HBGS_MPC_R;
@@ -122,16 +124,17 @@ struct Mpc_parameters
 
     static constexpr uint16_t digest_size_bytes_ = HBGS_DS;
 
-    // For our challenge lists we need one byte for each of the opened rounds, 4
-    // bits as an offset for the round number and 4 bits for the party whose
-    // tape is left unopened. A 4 bits offset corresponds to 16 rounds per path
-    // Make the challenge hash the correct length
+    // For our challenge lists we need one byte for each of the opened
+    // rounds, 4 bits as an offset for the round number and 4 bits for the
+    // party whose tape is left unopened. A 4 bits offset corresponds to 16
+    // rounds per path Make the challenge hash the correct length
     static constexpr uint16_t lists_rounds_per_path_ = 16;
     static constexpr uint16_t challenge_hash_bytes_ =
       (mpc_rounds_per_path_ == lists_rounds_per_path_) ? opened_mpc_rounds_
                                                        : digest_size_bytes_;
 
-    static constexpr uint16_t nonce_size_bytes_ = lowmc_state_bytes_;
+    static constexpr uint16_t nonce_size_bytes_ =
+      Lowmc_parameters::lowmc_state_bytes_;
 
     // At the moment
     //  paramset.seedSizeBytes, paramset.saltSizeBytes

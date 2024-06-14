@@ -97,12 +97,12 @@ Tape_offset Mpc_top_authpath::set_offsets(Tape_offset const &of) noexcept
 
     for (auto &os : path_offsets_) {
         os = base_offset_;
-        base_offset_ += Mpc_parameters::lowmc_state_bits_;
+        base_offset_ += Lowmc_parameters::lowmc_state_bits_;
     }
 
     for (auto &os : intermediate_offsets_) {
         os = base_offset_;
-        base_offset_ += Mpc_parameters::lowmc_state_bits_;
+        base_offset_ += Lowmc_parameters::lowmc_state_bits_;
     }
 
     // Check for consistency, Node_address_state doesn't use all the bits here
@@ -141,11 +141,11 @@ void Mpc_top_authpath::compute_aux_tape_sign(randomTape_t *tapes,
 
     Lowmc_state_words64 current_hash_mask{ 0 };
     std::memcpy(current_hash_mask, base_tree_root_mask,
-      Mpc_parameters::lowmc_state_bytes_);
+      Lowmc_parameters::lowmc_state_bytes_);
 
     node_addr.set_and_apply_initial_mask(tapes, t);
 
-    uint32_t n_row_nodes = Public_parameters::k_;
+    uint32_t n_row_nodes = Tree_parameters::k_;
     uint32_t n_child_row_nodes{ 0 };
     uint8_t path_index{ 0 };
     Mt_index_type child_row_index{ 0 };
@@ -192,10 +192,10 @@ void Mpc_top_authpath::compute_aux_tape_sign(randomTape_t *tapes,
         } else {
             if (mfors_tree_root_mask != nullptr) {
                 std::memcpy(next_hash_mask, mfors_tree_root_mask,
-                  Mpc_parameters::lowmc_state_bytes_);
+                  Lowmc_parameters::lowmc_state_bytes_);
             } else {
                 std::memset(
-                  next_hash_mask, 0, Mpc_parameters::lowmc_state_bytes_);
+                  next_hash_mask, 0, Lowmc_parameters::lowmc_state_bytes_);
             }
         }
 
@@ -251,7 +251,7 @@ void Mpc_top_authpath::compute_aux_tape_sign(randomTape_t *tapes,
 
         path_index++;
         std::memcpy(current_hash_mask, next_hash_mask,
-          Mpc_parameters::lowmc_state_bytes_);
+          Lowmc_parameters::lowmc_state_bytes_);
     }
 
 #ifdef DEBUG_TOP_MPC
@@ -275,11 +275,11 @@ void Mpc_top_authpath::compute_aux_tape_verify(randomTape_t *tapes,
 
     Lowmc_state_words64 current_hash_mask{ 0 };
     std::memcpy(current_hash_mask, base_tree_root_mask,
-      Mpc_parameters::lowmc_state_bytes_);
+      Lowmc_parameters::lowmc_state_bytes_);
 
     node_addr.set_and_apply_initial_mask(tapes, t);
 
-    uint32_t n_row_nodes = Public_parameters::k_;
+    uint32_t n_row_nodes = Tree_parameters::k_;
     uint32_t n_child_row_nodes{ 0 };
     uint8_t path_index{ 0 };
     Mt_index_type child_row_index{ 0 };
@@ -310,10 +310,10 @@ void Mpc_top_authpath::compute_aux_tape_verify(randomTape_t *tapes,
         } else {
             if (mfors_tree_root_mask != nullptr) {
                 std::memcpy(next_hash_mask, mfors_tree_root_mask,
-                  Mpc_parameters::lowmc_state_bytes_);
+                  Lowmc_parameters::lowmc_state_bytes_);
             } else {
                 std::memset(
-                  next_hash_mask, 0, Mpc_parameters::lowmc_state_bytes_);
+                  next_hash_mask, 0, Lowmc_parameters::lowmc_state_bytes_);
             }
         }
 
@@ -339,7 +339,7 @@ void Mpc_top_authpath::compute_aux_tape_verify(randomTape_t *tapes,
 
         path_index++;
         std::memcpy(current_hash_mask, next_hash_mask,
-          Mpc_parameters::lowmc_state_bytes_);
+          Lowmc_parameters::lowmc_state_bytes_);
     }
 }
 
@@ -350,7 +350,7 @@ void Mpc_top_authpath::get_aux_bits(uint8_t *aux_bits, Tape_offset &aux_pos,
 
     Node_address_state node_addr{ initial_node_addr_ };
 
-    uint32_t n_row_nodes = Public_parameters::k_;
+    uint32_t n_row_nodes = Tree_parameters::k_;
     uint32_t n_child_row_nodes{ 0 };
     Mt_index_type child_row_index{ 0 };
     Top_path_state path_state;
@@ -390,7 +390,7 @@ void Mpc_top_authpath::set_aux_bits(randomTape_t *tapes, Tape_offset &aux_pos,
 
     Node_address_state node_addr{ initial_node_addr_ };
 
-    uint32_t n_row_nodes = Public_parameters::k_;
+    uint32_t n_row_nodes = Tree_parameters::k_;
     uint32_t n_child_row_nodes{ 0 };
     Mt_index_type child_row_index{ 0 };
     Top_path_state path_state;
@@ -435,7 +435,7 @@ int Mpc_top_authpath::mpc_simulate_sign(randomTape_t *tapes,
 
     Lowmc_state_words64 current_masked_hash{ 0 };
     std::memcpy(current_masked_hash, masked_base_tree_root,
-      Mpc_parameters::lowmc_state_bytes_);
+      Lowmc_parameters::lowmc_state_bytes_);
 
     node_addr.set_and_apply_initial_mask(tapes, t);
 
@@ -447,7 +447,7 @@ int Mpc_top_authpath::mpc_simulate_sign(randomTape_t *tapes,
     }
 #endif
 
-    uint32_t n_row_nodes = Public_parameters::k_;
+    uint32_t n_row_nodes = Tree_parameters::k_;
     uint32_t n_child_row_nodes{ 0 };
     uint8_t path_index{ 0 };
     Mt_index_type child_row_index{ 0 };
@@ -493,7 +493,7 @@ int Mpc_top_authpath::mpc_simulate_sign(randomTape_t *tapes,
         auto masked_node = (Word *)mpc_wd.inputs_[input_index_base + 2][t];
 
         std::memcpy(masked_node, node_addr.node_state(),
-          Mpc_parameters::lowmc_state_bytes_);
+          Lowmc_parameters::lowmc_state_bytes_);
 
 #ifdef DEBUG_TOP_MPC
         if (Top_authpath::height_ < 5 && t == 0) {
@@ -594,11 +594,11 @@ int Mpc_top_authpath::mpc_simulate_sign(randomTape_t *tapes,
         path_index++;
 
         std::memcpy(current_masked_hash, next_masked_hash,
-          Mpc_parameters::lowmc_state_bytes_);
+          Lowmc_parameters::lowmc_state_bytes_);
     }
 
     std::memcpy(
-      output, current_masked_hash, Mpc_parameters::lowmc_state_bytes_);
+      output, current_masked_hash, Lowmc_parameters::lowmc_state_bytes_);
 
 #ifdef DEBUG_TOP_MPC
     if (t == 0) {
@@ -622,11 +622,11 @@ int Mpc_top_authpath::mpc_simulate_and_verify(randomTape_t *tapes,
 
     Lowmc_state_words64 current_masked_hash{ 0 };
     std::memcpy(current_masked_hash, masked_base_tree_root,
-      Mpc_parameters::lowmc_state_bytes_);
+      Lowmc_parameters::lowmc_state_bytes_);
 
     node_addr.set_and_apply_initial_mask(tapes, t);
 
-    uint32_t n_row_nodes = Public_parameters::k_;
+    uint32_t n_row_nodes = Tree_parameters::k_;
     uint32_t n_child_row_nodes{ 0 };
     uint8_t path_index{ 0 };
     Mt_index_type child_row_index{ 0 };
@@ -705,10 +705,10 @@ int Mpc_top_authpath::mpc_simulate_and_verify(randomTape_t *tapes,
         path_index++;
         //            std::memcpy(
         //              current_hash, next_hash,
-        //              Mpc_parameters::lowmc_state_bytes_);
+        //              Lowmc_parameters::lowmc_state_bytes_);
     }
 
-    std::memcpy(output, next_masked_hash, Mpc_parameters::lowmc_state_bytes_);
+    std::memcpy(output, next_masked_hash, Lowmc_parameters::lowmc_state_bytes_);
 
     if (Top_authpath::height_ < 5 && t == 0) {
         std::cout << "\n   Output: ";

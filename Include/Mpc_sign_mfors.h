@@ -81,7 +81,7 @@ class Mpc_sign_mfors
       size_t t) noexcept;
 
     constexpr static Tape_offset offset_bits_ =
-      Mpc_parameters::lowmc_state_bits_ +// for the local root mask
+      Lowmc_parameters::lowmc_state_bits_ +// for the local root mask
       Mpc_mfors_full_paths::offset_bits_;
 
     constexpr static Tape_offset tape_bits_ = Mpc_mfors_full_paths::tape_bits_;
