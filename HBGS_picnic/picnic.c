@@ -214,7 +214,7 @@ int picnic_keygen(
 /* Test restricted to those we need */
 int is_picnic3(picnic_params_t params)
 {
-    if (params == Picnic3_L1 || Picnic3_L1t || params == Picnic3_L5) {
+    if (params == Picnic3_L1 || params == Picnic3_L1t || params == Picnic3_L5 || params == Picnic3_L5t) {
         return 1;
     }
     return 0;
@@ -307,7 +307,7 @@ size_t picnic_signature_size(picnic_params_t parameters)
     if (ret != EXIT_SUCCESS) { return PICNIC_MAX_SIGNATURE_SIZE; }
 
     /* Picnic3 parameter sets - restricted to those we need */
-    if (parameters == Picnic3_L1 || Picnic3_L1t || parameters == Picnic3_L5
+    if (parameters == Picnic3_L1 || parameters == Picnic3_L1t || parameters == Picnic3_L5
         || parameters == Picnic3_L5t) {
 
         size_t u = paramset.numOpenedRounds;
