@@ -181,7 +181,7 @@ int generate_and_save_credential(std::string base_dir,
 
         td.times_.emplace_back(
           Mpc_time_point{ "generate_top_tree_and_calculate_authpaths",
-            static_cast<float>(td.timer_.get_duration() + 0.5f) });
+            static_cast<float>(td.timer_.get_duration())});
 
         if (check_paths) {
             td.timer_.reset();
@@ -192,7 +192,7 @@ int generate_and_save_credential(std::string base_dir,
             }
 
             td.times_.emplace_back(Mpc_time_point{ "check_mfors_authpaths",
-              static_cast<float>(td.timer_.get_duration() + 0.5f) });
+              static_cast<float>(td.timer_.get_duration())});
         }
 
         td.timer_.reset();
@@ -203,7 +203,7 @@ int generate_and_save_credential(std::string base_dir,
         os << '\n';
 
         td.times_.emplace_back(Mpc_time_point{ "write_mfors_authpath_data",
-          static_cast<float>(td.timer_.get_duration() + 0.5f) });
+          static_cast<float>(td.timer_.get_duration())});
 
 
         if (l > 0) {
@@ -215,7 +215,7 @@ int generate_and_save_credential(std::string base_dir,
 
             td.times_.emplace_back(
               Mpc_time_point{ "calculate_indices_from_hash",
-                static_cast<float>(td.timer_.get_duration() + 0.5f) });
+                static_cast<float>(td.timer_.get_duration())});
 
             td.timer_.reset();
 
@@ -223,14 +223,14 @@ int generate_and_save_credential(std::string base_dir,
             gt_addr.index_ /= Tree_parameters::q_;
 
             td.times_.emplace_back(Mpc_time_point{ "adjust_G_tree_address",
-              static_cast<float>(td.timer_.get_duration() + 0.5f) });
+              static_cast<float>(td.timer_.get_duration())});
         }
     }
 
     os.close();
 
     td_full.times_.emplace_back(Mpc_time_point{ "generate_credential",
-      static_cast<float>(td_full.timer_.get_duration() + 0.5f) });
+      static_cast<float>(td_full.timer_.get_duration())});
 
     std::ostringstream ostr;
     ostr << issuer_name << '_' << user_name << ' ' << Tree_parameters::n_

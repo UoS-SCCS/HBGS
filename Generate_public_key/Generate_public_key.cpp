@@ -83,14 +83,14 @@ int generate_public_key(
     }
 
     td.times_.emplace_back(Mpc_time_point{ "calculate_public_key",
-      static_cast<float>(td.timer_.get_duration() + 0.5f) });
+      static_cast<float>(td.timer_.get_duration())});
 
     td.timer_.reset();
 
     issuer.save_data(base_dir);
 
     td.times_.emplace_back(Mpc_time_point{
-      "save_data", static_cast<float>(td.timer_.get_duration() + 0.5f) });
+      "save_data", static_cast<float>(td.timer_.get_duration())});
 
     td.timer_.reset();
 
@@ -101,7 +101,7 @@ int generate_public_key(
     }
 
     td.times_.emplace_back(Mpc_time_point{ "construct_from_file",
-      static_cast<float>(td.timer_.get_duration() + 0.5f) });
+      static_cast<float>(td.timer_.get_duration())});
 
     if (std::memcmp(issuer.public_key(), issuer2.public_key(),
           Lowmc_parameters::lowmc_state_bytes_)

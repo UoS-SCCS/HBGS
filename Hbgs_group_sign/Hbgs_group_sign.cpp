@@ -485,7 +485,7 @@ int test_group_authpaths(std::string const &base_dir,
         return EXIT_FAILURE;
     }
     td.times_.emplace_back(Mpc_time_point{ "generate_signature",
-      static_cast<float>(td.timer_.get_duration() + 0.5f) });
+      static_cast<float>(td.timer_.get_duration())});
 
     std::cout << " success, signature is " << signature_len << " bytes\n";
 
@@ -509,7 +509,7 @@ int test_group_authpaths(std::string const &base_dir,
       message_digest, nonce, expected_output_ptr);
 
     td.times_.emplace_back(Mpc_time_point{ "verify_signature",
-      static_cast<float>(td.timer_.get_duration() + 0.5f) });
+      static_cast<float>(td.timer_.get_duration())});
 
     if (ret != EXIT_SUCCESS) {
         std::cerr << "\nSignature verification failed\n";
